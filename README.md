@@ -1,5 +1,5 @@
 <div align="right">
-  <a href="./readmeRUSS.md">Read in Russian (readmeRUSS.md)</a>
+  <a href="./READMERUSS.md">🇷🇺 Read in Russian (READMERUSS.md)</a>
 </div>
 
 # Slasher (@Dirfiks3)
