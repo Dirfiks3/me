@@ -7,51 +7,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #030303;
-            --surface: rgba(20, 20, 20, 0.6);
-            --text-main: #f0f0f0;
+            --bg-color: #000000;
+            --surface: #111111;
+            --surface-hover: #1a1a1a;
+            --text-main: #ffffff;
             --text-muted: #888888;
+            --border: #222222;
+            --border-hover: #444444;
             --accent: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
         
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            line-height: 1.7;
+            line-height: 1.6;
             display: flex;
             justify-content: center;
             min-height: 100vh;
             padding: 80px 20px;
             overflow-x: hidden;
             position: relative;
+            cursor: default;
         }
 
-        /* Фон */
-        .bg-blob {
-            position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1;
-            opacity: 0.3; animation: float 20s infinite alternate ease-in-out;
-        }
-        .blob-1 { width: 400px; height: 400px; background: #1a1a2e; top: -100px; left: -100px; }
-        .blob-2 { width: 300px; height: 300px; background: #16213e; bottom: 10%; right: -50px; animation-delay: -5s; }
-        .blob-3 { width: 250px; height: 250px; background: #0f3460; top: 40%; left: 40%; animation-delay: -10s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 50px) scale(1.1); }
+        /* Легкое фоновое свечение */
+        .bg-glow {
+            position: fixed;
+            top: -20%; left: 50%;
+            transform: translateX(-50%);
+            width: 80vw; height: 80vh;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .container { max-width: 720px; width: 100%; position: relative; z-index: 10; }
 
-        /* Анимации */
+        /* Плавные анимации */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -63,146 +58,146 @@
         .d-4 { animation-delay: 0.4s; }
 
         /* Шапка */
-        header { margin-bottom: 60px; position: relative; }
+        header { margin-bottom: 70px; position: relative; }
         
-        .lang-switch {
-            position: absolute;
-            top: 0; right: 0;
-            display: flex;
-            gap: 5px;
-            z-index: 20;
-        }
+        .lang-switch { position: absolute; top: 0; right: 0; display: flex; gap: 5px; z-index: 100; }
         .lang-switch button {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            transition: all 0.3s;
+            background: var(--surface); border: 1px solid var(--border); color: var(--text-muted);
+            padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: 'Fira Code', monospace;
+            font-size: 0.8rem; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .lang-switch button:hover, .lang-switch button.active {
-            background: #fff; color: #000; border-color: #fff;
+        .lang-switch button:hover { border-color: #555; color: #fff; }
+        /* Кнопка main (бывшая active) */
+        .lang-switch button.main { 
+            background: #fff; color: #000; border-color: #fff; font-weight: 600;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
         h1 {
-            font-size: 4rem; font-weight: 700; letter-spacing: -2px;
-            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+            font-size: 4rem; font-weight: 700; letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             line-height: 1.1;
+            margin-bottom: 10px;
         }
-        .subtitle {
-            color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px;
-            font-family: 'Fira Code', monospace; display: flex; align-items: center; gap: 10px;
-        }
-        .subtitle::before { content: ">"; color: var(--accent); font-weight: bold; }
 
-        /* Кнопки ссылок */
-        .links { display: flex; gap: 15px; flex-wrap: wrap; position: relative; z-index: 20; }
+        .subtitle {
+            color: var(--text-muted); font-size: 1.1rem; 
+            font-family: 'Fira Code', monospace; display: flex; align-items: center; gap: 8px;
+        }
+        .subtitle::before { content: ">"; color: #666; font-weight: bold; }
+
+        /* Кнопки */
+        .links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
         .links a {
-            color: var(--text-main); text-decoration: none; font-size: 0.95rem;
-            padding: 12px 24px; border: 1px solid var(--border); border-radius: 12px;
-            background: var(--surface); backdrop-filter: blur(10px);
-            transition: all 0.3s ease; display: inline-flex; align-items: center;
-            position: relative; overflow: hidden; font-weight: 500; cursor: pointer;
+            color: var(--text-main); text-decoration: none; font-size: 0.9rem;
+            padding: 10px 20px; border: 1px solid var(--border); border-radius: 8px;
+            background: var(--surface); transition: all 0.2s ease; 
+            display: inline-flex; align-items: center; font-weight: 500; 
         }
-        .links a::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; transform: scaleY(0); transform-origin: bottom;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: -1;
+        .links a:hover { 
+            background: #fff; color: #000; border-color: #fff; 
+            transform: translateY(-2px);
         }
-        .links a:hover { color: #000; border-color: #fff; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
-        .links a:hover::before { transform: scaleY(1); transform-origin: top; }
 
         /* Секции */
-        section { margin-bottom: 60px; }
+        section { margin-bottom: 70px; }
         h2 {
-            font-size: 0.9rem; font-weight: 600; margin-bottom: 25px;
-            text-transform: uppercase; letter-spacing: 3px; color: #666;
+            font-size: 0.8rem; font-weight: 600; margin-bottom: 25px;
+            text-transform: uppercase; letter-spacing: 2px; color: #666;
             display: flex; align-items: center; gap: 15px;
         }
-        h2::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
-        
-        p { color: #aaa; font-size: 1.05rem; max-width: 600px; }
+        h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+        p { color: #999; font-size: 1rem; max-width: 600px; }
 
         /* Карточки проектов */
-        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
         .card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-            padding: 25px; backdrop-filter: blur(10px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative; overflow: hidden;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 24px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            display: flex; justify-content: space-between; align-items: flex-start;
+            position: relative;
+            overflow: hidden;
         }
-        .card::after {
-            content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: skewX(-20deg); transition: 0.5s; pointer-events: none;
-        }
-        .card:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); }
-        .card:hover::after { left: 150%; }
-
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; position: relative; z-index: 2; }
-        .card-title { font-size: 1.3rem; font-weight: 600; color: #fff; text-decoration: none; }
         
-        /* Кнопки внутри карточек */
-        .card-links { display: flex; gap: 10px; }
-        .card-links a {
-            color: #888; text-decoration: none; font-size: 0.8rem;
-            padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.08);
-            transition: all 0.2s; font-family: 'Fira Code', monospace; cursor: pointer;
+        /* Эффект блика на карточке */
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent);
+            transform: skewX(-20deg);
+            transition: all 0.5s;
         }
-        .card-links a:hover { background: #fff; color: #000; transform: scale(1.05); }
-        .card-desc { font-size: 0.95rem; color: var(--text-muted); }
+
+        .card:hover { 
+            background: var(--surface-hover);
+            border-color: var(--border-hover); 
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255,255,255,0.02);
+        }
+        
+        .card:hover::before {
+            left: 150%;
+        }
+
+        .card-info { flex: 1; padding-right: 20px; position: relative; z-index: 2; }
+        .card-title { font-size: 1.15rem; font-weight: 600; color: #fff; text-decoration: none; display: block; margin-bottom: 6px; }
+        .card-desc { font-size: 0.9rem; color: #888; }
+        
+        /* Кнопки в карточках */
+        .card-links { display: flex; gap: 8px; flex-shrink: 0; position: relative; z-index: 2; }
+        .card-links a {
+            color: #aaa; text-decoration: none; font-size: 0.75rem;
+            padding: 6px 12px; border-radius: 6px; background: #000;
+            transition: all 0.2s; font-family: 'Fira Code', monospace; 
+            border: 1px solid var(--border);
+        }
+        .card-links a:hover { background: #fff; color: #000; border-color: #fff; transform: scale(1.05); }
 
         /* Стек */
-        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .tech-item {
-            background: var(--surface); border: 1px solid var(--border); padding: 15px;
-            border-radius: 12px; backdrop-filter: blur(10px); transition: border-color 0.3s;
+        .tech-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .tech-item { 
+            background: var(--surface); border: 1px solid var(--border); 
+            padding: 16px; border-radius: 12px; transition: border-color 0.3s;
         }
-        .tech-item:hover { border-color: rgba(255,255,255,0.3); }
-        .tech-label { font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; font-weight: 600; }
+        .tech-item:hover { border-color: #444; }
+        .tech-label { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600; }
         .tech-value { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #ccc; }
 
         /* Футер */
-        footer { margin-top: 100px; padding-top: 30px; border-top: 1px solid var(--border); text-align: center; }
-        .quote {
-            font-family: 'Fira Code', monospace; font-size: 0.9rem; color: #666;
-            display: inline-block; overflow: hidden; white-space: nowrap;
-            border-right: 2px solid #fff; animation: typing 4s steps(50, end), blink 1s step-end infinite;
-        }
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink { 50% { border-color: transparent } }
+        footer { margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--border); text-align: center; }
+        .quote { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #555; }
 
         @media (max-width: 600px) {
             h1 { font-size: 3rem; }
-            .lang-switch { top: -30px; right: 0; }
+            .lang-switch { top: -40px; right: auto; left: 0; }
             .links { flex-direction: column; }
             .links a { justify-content: center; }
-            .quote { white-space: normal; border-right: none; animation: none; }
+            .card { flex-direction: column; }
+            .card-links { margin-top: 15px; }
+            .tech-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-blob blob-1"></div>
-    <div class="bg-blob blob-2"></div>
-    <div class="bg-blob blob-3"></div>
+    <div class="bg-glow"></div>
 
     <div class="container">
         <header class="reveal">
             <div class="lang-switch">
-                <button onclick="setLang('en')" id="btn-en" class="active">EN</button>
+                <!-- Класс active заменен на main -->
+                <button onclick="setLang('en')" id="btn-en" class="main">EN</button>
                 <button onclick="setLang('ru')" id="btn-ru">RU</button>
             </div>
             <h1>Slasher</h1>
             <div class="subtitle reveal d-1" id="subtitle-text">13 y.o. Developer & Android Modder</div>
             
             <div class="links reveal d-2">
-                <!-- Твои ссылки. target="_blank" открывает их в новой вкладке -->
-                <a href="https://github.com/Dirfiks3" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://t.me/slasher_dev" target="_blank" rel="noopener">Telegram</a>
+                <a href="https://github.com/Dirfiks3" target="_blank" onclick="window.open('https://github.com/Dirfiks3', '_blank'); return false;">GitHub</a>
+                <a href="https://t.me/slasher_dev" target="_blank" onclick="window.open('https://t.me/slasher_dev', '_blank'); return false;">Telegram</a>
             </div>
         </header>
 
@@ -216,50 +211,47 @@
             <div class="grid">
                 <!-- Voidroid -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-info">
                         <span class="card-title">Voidroid</span>
-                        <div class="card-links">
-                            <!-- ВСТАВЬ СЮДА ССЫЛКУ НА РЕПОЗИТОРИЙ VOIDROID, КОГДА СОЗДАШЬ -->
-                            <a href="https://github.com/Dirfiks3" target="_blank" rel="noopener">GitHub</a>
-                        </div>
+                        <div class="card-desc" id="proj-voidroid-desc">Hardened & debloated custom ROM for Samsung Galaxy A51 (LineageOS 22.1 / Android 15).</div>
                     </div>
-                    <div class="card-desc" id="proj-voidroid-desc">Hardened & debloated custom ROM for Samsung Galaxy A51 (LineageOS 22.1 / Android 15).</div>
+                    <div class="card-links">
+                        <a href="https://github.com/Dirfiks3/voidroid" target="_blank" onclick="window.open('https://github.com/Dirfiks3/voidroid', '_blank'); return false;">GitHub</a>
+                    </div>
                 </div>
 
                 <!-- VoidMAX -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-info">
                         <span class="card-title">VoidMAX</span>
-                        <div class="card-links">
-                            <!-- ВСТАВЬ СЮДА ССЫЛКУ НА РЕПОЗИТОРИЙ VOIDMAX, КОГДА СОЗДАШЬ -->
-                            <a href="https://github.com/Dirfiks3" target="_blank" rel="noopener">GitHub</a>
-                        </div>
+                        <div class="card-desc" id="proj-voidmax-desc">Telemetry-free messenger client built with React Native.</div>
                     </div>
-                    <div class="card-desc" id="proj-voidmax-desc">Telemetry-free messenger client built with React Native.</div>
+                    <div class="card-links">
+                        <a href="https://github.com/Dirfiks3" target="_blank" onclick="window.open('https://github.com/Dirfiks3', '_blank'); return false;">GitHub</a>
+                    </div>
                 </div>
 
                 <!-- DistroScope -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-info">
                         <span class="card-title">DistroScope</span>
-                        <div class="card-links">
-                            <a href="https://github.com/Dirfiks3/DistroScope" target="_blank" rel="noopener">GitHub</a>
-                            <a href="https://distroscope.pages.dev" target="_blank" rel="noopener">Live</a>
-                        </div>
+                        <div class="card-desc" id="proj-distro-desc">Interactive Linux distribution finder web app.</div>
                     </div>
-                    <div class="card-desc" id="proj-distro-desc">Interactive Linux distribution finder web app.</div>
+                    <div class="card-links">
+                        <a href="https://distroscope.pages.dev" target="_blank" onclick="window.open('https://distroscope.pages.dev', '_blank'); return false;">Live Demo</a>
+                    </div>
                 </div>
 
                 <!-- LFS Gentoo TUI -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-info">
                         <span class="card-title">lfs-gentoo-tui</span>
-                        <div class="card-links">
-                            <a href="https://github.com/Dirfiks3/lfs-gentoo-tui" target="_blank" rel="noopener">GitHub</a>
-                            <a href="https://dirfiks3.github.io/lfs-gentoo-tui" target="_blank" rel="noopener">Live</a>
-                        </div>
+                        <div class="card-desc" id="proj-tui-desc">Terminal UI helper for building Linux From Scratch and Gentoo.</div>
                     </div>
-                    <div class="card-desc" id="proj-tui-desc">Terminal UI helper for building Linux From Scratch and Gentoo.</div>
+                    <div class="card-links">
+                        <a href="https://github.com/Dirfiks3/lfs-gentoo-tui" target="_blank" onclick="window.open('https://github.com/Dirfiks3/lfs-gentoo-tui', '_blank'); return false;">GitHub</a>
+                        <a href="https://dirfiks3.github.io/lfs-gentoo-tui" target="_blank" onclick="window.open('https://dirfiks3.github.io/lfs-gentoo-tui', '_blank'); return false;">Live</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -292,7 +284,6 @@
     </div>
 
     <script>
-        // Словарь с переводами
         const translations = {
             en: {
                 subtitle: "13 y.o. Developer & Android Modder",
@@ -322,13 +313,8 @@
             }
         };
 
-        let currentLang = 'en';
-
         function setLang(lang) {
-            currentLang = lang;
             const t = translations[lang];
-
-            // Меняем тексты
             document.getElementById('subtitle-text').innerText = t.subtitle;
             document.getElementById('about-title').innerText = t.aboutTitle;
             document.getElementById('about-text').innerText = t.aboutText;
@@ -339,18 +325,12 @@
             document.getElementById('proj-tui-desc').innerText = t.tuiDesc;
             document.getElementById('stack-title').innerText = t.stackTitle;
             document.getElementById('stack-lang-title').innerText = t.langTitle;
-            
-            // Эффект печатной машинки для цитаты
-            const quoteEl = document.getElementById('quote-text');
-            quoteEl.innerText = t.quote;
-            quoteEl.style.animation = 'none';
-            quoteEl.offsetHeight; /* trigger reflow */
-            quoteEl.style.animation = 'typing 3s steps(50, end), blink 1s step-end infinite';
+            document.getElementById('quote-text').innerText = t.quote;
 
-            // Меняем активную кнопку
-            document.getElementById('btn-en').classList.remove('active');
-            document.getElementById('btn-ru').classList.remove('active');
-            document.getElementById('btn-' + lang).classList.add('active');
+            // Изменено с active на main
+            document.getElementById('btn-en').classList.remove('main');
+            document.getElementById('btn-ru').classList.remove('main');
+            document.getElementById('btn-' + lang).classList.add('main');
         }
     </script>
 </body>
